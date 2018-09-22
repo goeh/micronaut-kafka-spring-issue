@@ -2,9 +2,13 @@
 
 A test project to work out issues with Micronaut and Spring Cloud Stream messaging interoperability
 
+## Steps to reproduce
+
     $ ./gradlew docker
     $ docker-compose up
     $ curl -X POST http://localhost:8080/
+
+## Micronaut side
 
 ```
 @KafkaClient
@@ -21,7 +25,9 @@ Micronaut send the Kafka header 'sender' as a byte array so Spring side must cre
 
     Spring recieved message from 77,105,99,114,111,110,97,117,116
 
-A message sent from Spring Cloud Stream sends the header 'sender' as "value".
+## Spring side
+
+A message sent from Spring Cloud Stream to Kafka sends the header 'sender' as a quoted string "value".
 
 ```
 return MessageBuilder.withPayload(book)
