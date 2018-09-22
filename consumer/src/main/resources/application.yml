@@ -1,0 +1,29 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: consumer
+
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: spring
+          contentType: application/json
+        output:
+          destination: micronaut
+          contentType: application/json
+      kafka:
+        binder:
+          brokers:
+          - kafka:9092
+          zkNodes:
+          - kafka:2181
+          headers:
+          - sender
+
+logging:
+  level:
+    root: WARN
+    issue: DEBUG
