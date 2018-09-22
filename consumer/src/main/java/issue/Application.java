@@ -9,6 +9,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.support.MessageBuilder;
 
@@ -24,8 +25,7 @@ public class Application {
 
     @StreamListener(Processor.INPUT)
     @SendTo(Processor.OUTPUT)
-    public Message<Book> listener(MessageHeaders headers, Message<Book> message) {
-        String sender = getHeader(headers, "sender");
+    public Message<Book> listener(@Header("sender") String sender, Message<Book> message) {
         Book book = message.getPayload();
 
         log.debug("Spring recieved message from {}: {}", sender, book);
