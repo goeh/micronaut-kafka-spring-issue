@@ -20,6 +20,7 @@ spring:
           - kafka:9092
           zkNodes:
           - kafka:2181
+          headerMapperBeanName: myKafkaHeaderMapper
           headers:
           - sender
 
