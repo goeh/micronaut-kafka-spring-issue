@@ -21,8 +21,6 @@ spring:
           zkNodes:
           - kafka:2181
           headerMapperBeanName: myKafkaHeaderMapper
-          headers:
-          - sender
 
 logging:
   level:

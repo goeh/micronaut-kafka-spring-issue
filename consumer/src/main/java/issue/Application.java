@@ -41,7 +41,7 @@ public class Application {
         return new KafkaHeaderMapper() {
             @Override
             public void fromHeaders(MessageHeaders headers, Headers target) {
-                log.debug("Mapping headers from Spring: {}", headers);
+                log.trace("Mapping headers from Spring: {}", headers);
                 for (Map.Entry<String, Object> entry : headers.entrySet()) {
                     target.add(entry.getKey(), entry.getValue().toString().getBytes());
                 }
@@ -49,7 +49,7 @@ public class Application {
 
             @Override
             public void toHeaders(Headers source, Map<String, Object> target) {
-                log.debug("Mapping headers from Micronaut: {}", source);
+                log.trace("Mapping headers from Micronaut: {}", source);
                 for (org.apache.kafka.common.header.Header header : source) {
                     target.put(header.key(), new String(header.value()));
                 }
@@ -61,7 +61,7 @@ public class Application {
     @SendTo(Processor.OUTPUT)
     public Message<Book> listener(@Header("sender") String sender, Book book) {
 
-        log.debug("Spring recieved message from {}: {}", sender, book);
+        log.debug("---> Spring recieved message from {}: {}", sender, book);
 
         return MessageBuilder.withPayload(book)
                 .setHeader("sender", "spring")

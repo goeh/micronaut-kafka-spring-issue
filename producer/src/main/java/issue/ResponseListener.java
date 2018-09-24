@@ -14,6 +14,6 @@ public class ResponseListener {
 
     @Topic("micronaut")
     public void onMessage(@Header("sender") String sender, Book book) {
-        log.debug("Micronaut recieved message from {}: {}", sender, book);
+        log.debug("---> Micronaut recieved message from {}: {}", sender, book);
     }
 }
