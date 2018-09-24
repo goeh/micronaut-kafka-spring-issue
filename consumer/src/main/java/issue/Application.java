@@ -59,22 +59,13 @@ public class Application {
 
     @StreamListener(Processor.INPUT)
     @SendTo(Processor.OUTPUT)
-    public Message<Book> listener(@Header("sender") String sender, Message<Book> message) {
-        Book book = message.getPayload();
+    public Message<Book> listener(@Header("sender") String sender, Book book) {
 
         log.debug("Spring recieved message from {}: {}", sender, book);
 
         return MessageBuilder.withPayload(book)
                 .setHeader("sender", "spring")
                 .build();
-    }
-
-    private String getHeader(MessageHeaders headers, String name) {
-        byte[] header = headers.get(name, byte[].class);
-        if (header != null) {
-            return new String(header);
-        }
-        return null;
     }
 
     @PostMapping
