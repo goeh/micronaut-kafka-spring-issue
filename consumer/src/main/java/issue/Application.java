@@ -3,6 +3,7 @@ package issue;
 import org.apache.kafka.common.header.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -15,11 +16,15 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
 @SpringBootApplication
 @EnableBinding(Processor.class)
+@Controller
 public class Application {
 
     private final Logger log = LoggerFactory.getLogger(Application.class);
@@ -27,6 +32,9 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+
+    @Autowired
+    private Processor processor;
 
     @Bean
     public KafkaHeaderMapper myKafkaHeaderMapper() {
@@ -67,6 +75,16 @@ public class Application {
             return new String(header);
         }
         return null;
+    }
+
+    @PostMapping
+    @ResponseBody
+    public String send() {
+        Book book = new Book("Spring Boot in Action", "Craig Walls");
+        processor.input().send(MessageBuilder.withPayload(book)
+                .setHeader("sender", "spring")
+                .build());
+        return "Sent message to Kafka topic 'spring' (from Spring to Spring)\n";
     }
 
     public static class Book {
